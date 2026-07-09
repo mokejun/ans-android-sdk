@@ -2,9 +2,13 @@ apply plugin: 'com.android.library'
 apply from: "../maven.gradle"
 
 android {
-
+    namespace 'com.analysys.rn'
     compileSdkVersion rootProject.ext.compileSdkVersion
 
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+    }
     buildTypes {
         release {
             minifyEnabled true
@@ -16,13 +20,9 @@ android {
         sourceCompatibility rootProject.ext.sourceJavaVersion
         targetCompatibility rootProject.ext.targetJavaVersion
     }
-    lintOptions {
+    lint {
         checkReleaseBuilds false
         abortOnError false
-    }
-    defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
     }
 }
 

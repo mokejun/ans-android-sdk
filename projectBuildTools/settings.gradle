@@ -1,2 +1,13 @@
-//demo
+pluginManagement {
+    includeBuild('../ans-allgro-plugin/plugin')
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
+    }
+}
+
 include ':apidemo'
+project(':apidemo').projectDir = new File(settingsDir, './apidemo')

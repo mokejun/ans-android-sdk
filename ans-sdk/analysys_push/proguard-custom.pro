@@ -3,4 +3,4 @@
 #################################################################
 
 # 打通所有的包
--repackageclass com.analysys.pushs
+-repackageclasses com.analysys.pushs

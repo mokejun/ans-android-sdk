@@ -9,8 +9,6 @@ gradlew.bat analysys_allgro:uploadArchives
 gradlew.bat analysys_arkanalysys:uploadArchives
 gradlew.bat analysys_arkanalysys_no_op:uploadArchives
 
-echo mpaas
-gradlew.bat analysys_mpaas:uploadArchives
 echo rn
 gradlew.bat analysys_react_native:uploadArchives
 

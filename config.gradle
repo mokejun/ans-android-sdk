@@ -1,11 +1,12 @@
 ext {
     version = '4.5.17.7'
+    kotlin_version = '1.8.20'
 
-    compileSdkVersion = 28
-    buildToolsVersion = '28.0.3'
+    compileSdkVersion = 33
+    buildToolsVersion = '30.0.3'
 
     minSdkVersion = 14
-    targetSdkVersion = 31
+    targetSdkVersion = 33
 
     sourceJavaVersion = JavaVersion.VERSION_1_8
     targetJavaVersion = JavaVersion.VERSION_1_8
@@ -17,7 +18,6 @@ ext {
     paasName = release + 'analysys_core_' + "${version}_${releaseTime()}" + '.jar'
     zipName = 'analysys_paas_android_java_' + "${version}_${releaseTime()}"
     visualName = release + 'analysys_visual_' + "${version}_${releaseTime()}" + '.jar'
-    mpaasName = release + 'analysys_mpaas_' + "${version}_${releaseTime()}" + '.jar'
     reactNativeName = release + 'analysys_react_native_' + "${version}_${releaseTime()}" + '.jar'
     cmbName = release + 'analysys_CMB_' + "${version}_${releaseTime()}" + '.jar'
     encryptName = release + 'analysys_encrypt_' + "${version}_${releaseTime()}" + '.jar'
@@ -26,7 +26,6 @@ ext {
                   'analysys_encryption_' + "${version}",
                   'analysys_push_' + "${version}",
                   'analysys_visual_' + "${version}",
-                  'analysys_mpaas_' + "${version}",
                   'analysys_react_native_' + "${version}",
                   'analysys_allgro_' + "${version}"
     ]

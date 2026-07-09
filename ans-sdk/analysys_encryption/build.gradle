@@ -2,11 +2,17 @@ apply plugin: 'com.android.library'
 apply from: "../maven.gradle"
 
 android {
+    namespace 'com.analysys.aesencrypt'
     compileSdkVersion rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+    }
     buildTypes {
         release {
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), '../proguard-base.pro','proguard-custom.pro','proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), '../proguard-base.pro', 'proguard-custom.pro', 'proguard-rules.pro'
             consumerProguardFiles 'proguard-rules.pro'
         }
     }
@@ -14,13 +20,9 @@ android {
         sourceCompatibility rootProject.ext.sourceJavaVersion
         targetCompatibility rootProject.ext.targetJavaVersion
     }
-    lintOptions {
+    lint {
         checkReleaseBuilds false
         abortOnError false
-    }
-    defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
     }
 }
 

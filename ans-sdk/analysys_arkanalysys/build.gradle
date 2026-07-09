@@ -1,30 +1,26 @@
-import java.security.MessageDigest
-
 apply plugin: 'com.android.library'
 apply from: "../maven.gradle"
 
 android {
-
+    namespace 'com.analysys.arkanalysys'
     compileSdkVersion rootProject.ext.compileSdkVersion
 
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+    }
     buildTypes {
         release {
             minifyEnabled false
-//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), '../proguard-base.pro'
-//            consumerProguardFiles 'proguard-custom.pro'
         }
     }
     compileOptions {
         sourceCompatibility rootProject.ext.sourceJavaVersion
         targetCompatibility rootProject.ext.targetJavaVersion
     }
-    lintOptions {
+    lint {
         checkReleaseBuilds false
         abortOnError false
-    }
-    defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
     }
 }
 
@@ -36,59 +32,43 @@ dependencies {
     api project(':analysys_allgro')
 }
 
+import java.security.MessageDigest
+
 task delRelease(type: Delete) {
     delete('../release')
     delete('../../../repo')
-
-//    delete('../../repo/cn/com/analysys/analysys-core/')
-//    delete('../../repo/cn/com/analysys/analysys-encrypt/')
-//    delete('../../repo/cn/com/analysys/analysys-push/')
-//    delete('../../repo/cn/com/analysys/analysys-visual/')
-//    delete('../../repo/cn/com/analysys/analysys-allgro/')
-//    delete('../../repo/cn/com/analysys/analysys-arkanalysys/')
 }
 
 task releaseAar(type: Copy) {
-
     for (int i = 0; i < moduleName.size; i++) {
         def tmpName = "${moduleName[i]}".replace("_${rootProject.ext.version}", "")
-
         def endName = "${moduleName[i]}".replaceAll("_", "-")
         from("../${tmpName}/build/outputs/aar/") {
             rename("${tmpName}-release.aar", "${endName}.aar")
             exclude("${tmpName}-release.aar.asc")
         }
     }
-
     includeEmptyDirs = false
-
     into '../release/aar/'
-
 }
 
 task releaseMapping(type: Copy, dependsOn: ['releaseAar']) {
-
     for (int i = 0; i < moduleName.size; i++) {
-
         def tmpName = "${moduleName[i]}".replace("_${rootProject.ext.version}", "")
-
         def endName = "${moduleName[i]}".replaceAll("_", "-")
         from("../${tmpName}/build/outputs/mapping/release/") {
             include('mapping.txt')
             rename('mapping.txt', "mapping-${endName}.txt")
         }
     }
-
     into '../release/mapping/'
 }
 
 task zipMapping(type: Zip, dependsOn: ['releaseMapping']) {
     from '../release/mapping/'
-
-    archiveName = "analysys_pass_android_${version}_mapping_${releaseTimeVariable}.zip"
-    destinationDir file("../release/zip")
+    archiveFileName = "analysys_pass_android_${version}_mapping_${releaseTimeVariable}.zip"
+    destinationDirectory = file("../release/zip")
 }
-
 
 for (int i = 0; i < moduleName.size(); i++) {
     def endName = "${moduleName[i]}".replaceAll("_", "-")
@@ -109,18 +89,13 @@ for (int i = 0; i < moduleName.size(); i++) {
             include('assets/')
         }
         into "../release/jar/tmp/${endName}/"
-
         includeEmptyDirs = false
     }
 
-
     task "jar${moduleName[i]}"(type: Jar, dependsOn: ["unZipJar${moduleName[i]}"]) {
         from("../release/jar/tmp/${endName}/")
-        println("endName:" + endName)
-        baseName = "${endName}".replace("-${rootProject.ext.version}", "")
-        destinationDir = file("../release/jar/")
-
-
+        archiveBaseName = "${endName}".replace("-${rootProject.ext.version}", "")
+        destinationDirectory = file("../release/jar/")
         manifest {
             attributes(
                     'Implementation-Title': "${project.name}",
@@ -132,14 +107,12 @@ for (int i = 0; i < moduleName.size(); i++) {
     }
 
     task "jarclean${moduleName[i]}"(type: Delete, dependsOn: ["jar${moduleName[i]}"]) {
-
         delete("../release/jar/${endName}")
         delete("../release/jar/tmp")
     }
 }
 
 task makeJar() {
-
 }
 
 for (int i = 0; i < moduleName.size(); i++) {
@@ -152,33 +125,18 @@ task makeDemo(type: Copy) {
         include("apidemo/proguard-rules.pro")
     }
     from("../../projectBuildTools/")
-
     into("../release/zip/demo")
 }
 
 task makeDemoAar(type: Copy, dependsOn: ["makeDemo"]) {
     from("../release/aar/")
-
     into("../release/zip/demo/apidemo/libs")
 }
 
 task makeZipAns(type: Zip, dependsOn: ["makeDemoAar"]) {
-
     from("../release/zip/demo/")
-//    from("../release/") {
-//        include("aar/")
-//        include("jar/")
-//        exclude("jar/analysys-allgro-*")
-//
-//    }
-
-//    from("../../") {
-//        include("repo/")
-//    }
-
-    archiveName = "analysys_pass_android_${version}_Demo_${releaseTimeVariable}.zip"
-    destinationDir file("../release/zip")
-
+    archiveFileName = "analysys_pass_android_${version}_Demo_${releaseTimeVariable}.zip"
+    destinationDirectory = file("../release/zip")
 }
 
 task makeZipAAR(type: Zip) {
@@ -187,9 +145,8 @@ task makeZipAAR(type: Zip) {
         include("jar/")
         exclude("jar/analysys-allgro-*")
     }
-
-    archiveName = "analysys_pass_android_${version}_SDK_${releaseTimeVariable}.zip"
-    destinationDir file("../release/zip")
+    archiveFileName = "analysys_pass_android_${version}_SDK_${releaseTimeVariable}.zip"
+    destinationDirectory = file("../release/zip")
 }
 
 task makeMd5() {
@@ -222,11 +179,10 @@ task makeZipAnsClean(type: Delete, dependsOn: ["makeZipAns", "makeMd5", "makeZip
     delete("../release/jar/")
 }
 
-static def generateMD5(file)
-{
+static def generateMD5(file) {
     MessageDigest md = MessageDigest.getInstance("MD5");
-    file.eachByte 4096, {bytes, size ->
+    file.eachByte 4096, { bytes, size ->
         md.update(bytes, 0, size);
     }
-    return md.digest().collect {String.format "%02x", it}.join()
+    return md.digest().collect { String.format "%02x", it }.join()
 }
