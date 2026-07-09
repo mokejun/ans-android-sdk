@@ -1,13 +1,16 @@
+plugins {
+    id 'com.analysys.android.plugin' apply false
+}
+
 if (apidemo_type.toBoolean()) {
     apply plugin: 'com.android.application'
-    // analysys-allgro-plugin 1.1.3 is incompatible with AGP 7+; enable only when plugin is upgraded
-    // apply plugin: 'com.analysys.android.plugin'
+    apply plugin: 'com.analysys.android.plugin'
 } else {
     apply plugin: 'com.android.library'
 }
 
 android {
-    namespace 'com.analysys.demo'
+    namespace 'com.analysys.apidemo'
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
@@ -70,7 +73,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.fragment:fragment:1.6.1'
-    compileOnly 'androidx.recyclerview:recyclerview:1.3.1'
+    compileOnly 'androidx.recyclerview:recyclerview:1.1.0'
 }
 
 tasks.withType(Javadoc).configureEach {

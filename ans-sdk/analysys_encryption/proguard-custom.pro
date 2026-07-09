@@ -3,4 +3,4 @@
 #################################################################
 
 # 打通所有的包
--repackageclass com.analysys.aesencrypt
+-repackageclasses com.analysys.aesencrypt

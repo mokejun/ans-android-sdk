@@ -1,4 +1,5 @@
 pluginManagement {
+    includeBuild('ans-allgro-plugin/plugin')
     repositories {
         google()
         mavenCentral()
